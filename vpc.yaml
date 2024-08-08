@@ -1,5 +1,14 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: Full VPC setup with security group allowing inbound traffic on ports 80, 443, 3306
+Description: Full VPC setup with security group allowing inbound traffic on ports 80, 443, 3306 in Ohio region (us-east-2)
+
+Parameters:
+  Region:
+    Description: "AWS Region to deploy the stack (default: us-east-2)"
+    Type: String
+    Default: "us-east-2"
+    AllowedValues:
+      - "us-east-2"
+    ConstraintDescription: "must be us-east-2."
 
 Resources:
   MyVPC:
@@ -17,7 +26,7 @@ Resources:
     Properties: 
       VpcId: !Ref MyVPC
       CidrBlock: '10.0.1.0/24'
-      AvailabilityZone: !Select [ 0, !GetAZs '' ]
+      AvailabilityZone: !Sub "${Region}a"
       MapPublicIpOnLaunch: 'true'
       Tags:
         - Key: Name
@@ -28,7 +37,7 @@ Resources:
     Properties: 
       VpcId: !Ref MyVPC
       CidrBlock: '10.0.2.0/24'
-      AvailabilityZone: !Select [ 1, !GetAZs '' ]
+      AvailabilityZone: !Sub "${Region}b"
       MapPublicIpOnLaunch: 'true'
       Tags:
         - Key: Name
